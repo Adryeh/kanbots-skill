@@ -1,0 +1,28 @@
+{
+  "name": "kanbots-skill",
+  "version": "0.1.0",
+  "description": "Kanban-for-Agents skill — Claude Code plugin and portable SKILL.md.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "node build/shared.mjs --lint-only",
+    "build": "npm run build:plugin && npm run build:portable",
+    "build:plugin": "node build/plugin.mjs",
+    "build:portable": "node build/portable.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "zod": "^3.23.8",
+    "vitest": "^1.6.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adryeh/kanbots-skill.git"
+  }
+}
