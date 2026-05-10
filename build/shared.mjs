@@ -1,7 +1,7 @@
 // build/shared.mjs
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, relative, dirname, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { argv, exit, cwd } from 'node:process';
 import matter from 'gray-matter';
 import { z } from 'zod';
@@ -41,6 +41,7 @@ const referenceFrontmatterSchema = z.object({
 
 const PLACEHOLDER_RE = /\b(TODO|FIXME|TBD|PLACEHOLDER|XXX)\b/;
 const INCLUDE_RE = /<!--\s*include:\s*([^\s]+)\s*-->/g;
+const INCLUDE_RE_SINGLE = /<!--\s*include:\s*([^\s]+)\s*-->/;
 const REL_LINK_RE = /\]\((references\/[^)]+\.md)\)/g;
 
 // --- Walk + classify ---
@@ -110,7 +111,7 @@ export async function lintMarkdownFile(absPath) {
   const includes = [...body.matchAll(INCLUDE_RE)].map(m => m[1]);
   for (const target of includes) {
     const abs = resolve(SRC_DIR, target);
-    if (!abs.startsWith(SRC_DIR)) {
+    if (!abs.startsWith(SRC_DIR + '/') && abs !== SRC_DIR) {
       throw new BuildError(rel, `include target escapes src/: ${target}`);
     }
     if (!existsSync(abs)) {
@@ -118,10 +119,13 @@ export async function lintMarkdownFile(absPath) {
     }
   }
 
-  // Relative reference links: must exist
+  // Relative reference links: must exist (and stay within src/)
   const links = [...body.matchAll(REL_LINK_RE)].map(m => m[1]);
   for (const target of links) {
     const abs = resolve(SRC_DIR, target);
+    if (!abs.startsWith(SRC_DIR + '/') && abs !== SRC_DIR) {
+      throw new BuildError(rel, `link target escapes src/: ${target}`);
+    }
     if (!existsSync(abs)) {
       throw new BuildError(rel, `internal link points to missing file: ${target}`);
     }
@@ -155,7 +159,7 @@ export async function expandIncludes(body) {
     const abs = resolve(SRC_DIR, target);
     const raw = await readFile(abs, 'utf8');
     const parsed = matter(raw);
-    if (INCLUDE_RE.test(parsed.content)) {
+    if (INCLUDE_RE_SINGLE.test(parsed.content)) {
       throw new BuildError(target, 'nested include detected; recursion forbidden');
     }
     out = out.replace(m[0], parsed.content.trim());
