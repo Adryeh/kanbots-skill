@@ -26,6 +26,11 @@ jobs:
           ver=$(node -p "require('./package.json').version")
           test "$tag" = "$ver" || { echo "tag $tag != version $ver" >&2; exit 1; }
 
+      - name: Rebuild artefacts after tests
+        # `npm test` includes a build snapshot test that wipes `dist/` in its
+        # finally block. Rebuild before producing release artefacts.
+        run: npm run build
+
       - name: Build --inline=core variant
         run: node build/portable.mjs --inline=core
       - name: Move inline variant aside
