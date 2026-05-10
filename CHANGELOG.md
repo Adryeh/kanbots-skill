@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. Format: [Ke
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-11
+
+### Fixed
+
+- Release pipeline: rebuild `dist/` after `npm test` (the build snapshot test wipes it in its `finally` block, leaving the zip step with no `dist/plugin/`).
+- Release pipeline: `git config --global` for both side-tree push steps (claude-plugin branch and `v*-skill` tag) so commits inside the freshly `git init`'d tmp repos see the bot identity.
+- Release pipeline: stash `SKILL.inline-core.md` outside `dist/skill/` before the default portable build wipes the directory, then move it back. v0.1.0 release was missing this asset.
+
 ## [0.1.0] - 2026-05-10
 
 ### Added

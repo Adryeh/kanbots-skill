@@ -33,11 +33,16 @@ jobs:
 
       - name: Build --inline=core variant
         run: node build/portable.mjs --inline=core
-      - name: Move inline variant aside
-        run: cp dist/skill/SKILL.md dist/skill/SKILL.inline-core.md
+      - name: Stash inline variant outside dist/
+        # The default portable build wipes dist/skill/ before emitting, so the
+        # inline copy must be parked outside that tree.
+        run: cp dist/skill/SKILL.md SKILL.inline-core.md
 
       - name: Build default portable on top
         run: node build/portable.mjs
+
+      - name: Restore inline variant alongside default
+        run: mv SKILL.inline-core.md dist/skill/SKILL.inline-core.md
 
       - name: Zip plugin output
         run: cd dist && zip -r ../kanbots-skill-plugin.zip plugin
