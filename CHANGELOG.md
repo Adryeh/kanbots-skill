@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. Format: [Ke
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-05-10
+
 ### Added
 
 - Build pipeline scaffolding: `src/` source-of-truth tree, `build/{plugin,portable}.mjs` emitting `dist/{plugin,skill}/`.
