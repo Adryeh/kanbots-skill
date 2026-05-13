@@ -25,7 +25,7 @@ describe('build pipeline against minimal src/', () => {
     } finally {
       if (fileCreated) rmSync(skillFile);
       if (created) rmSync(skillDir, { recursive: true });
-      rmSync('dist', { recursive: true, force: true });
+      rmSync('dist/plugin', { recursive: true, force: true });
     }
   });
 

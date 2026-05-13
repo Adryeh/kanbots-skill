@@ -1,6 +1,6 @@
 {
   "name": "kanbots-skill",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Kanban-for-Agents skill — Claude Code plugin, Codex plugin, and portable SKILL.md.",
   "type": "module",
   "private": true,

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. Format: [Ke
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-13
+
+### Fixed
+
+- Build snapshot test cleanup now removes only its own `dist/plugin` output, avoiding parallel test races with other `dist/*` builders.
+
 ## [0.2.0] - 2026-05-13
 
 ### Added
