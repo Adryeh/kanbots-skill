@@ -1,6 +1,6 @@
 # kanbots-skill
 
-Kanban-for-Agents skill — ships as a **Claude Code plugin** and a **portable `SKILL.md`** for any other agent (Cursor, Codex, Windsurf, Cline, Copilot, Gemini CLI, Continue.dev).
+Kanban-for-Agents skill — ships as a **Claude Code plugin**, a **Codex plugin**, and a **portable `SKILL.md`** for other agents (Cursor, Windsurf, Cline, Copilot, Gemini CLI, Continue.dev).
 
 ## What this is
 
@@ -13,6 +13,27 @@ claude plugin add github:Adryeh/kanbots-skill@claude-plugin
 ```
 
 The `claude-plugin` branch holds the built plugin layout. The plugin enables `enforce-agent-name` and `auto-extend-claim` hooks by default; opt-in hooks (`lint-mutation-args`, `stop-comment-progress`) ship as files.
+
+## Build — Codex plugin
+
+```
+npm run build:codex-plugin
+```
+
+The Codex plugin is emitted to `dist/codex-plugin/` with `.codex-plugin/plugin.json`, `skills/`, `commands/`, `agents/`, `hooks/`, `scripts/`, and `hooks.json`. It enables `enforce-agent-name` and `auto-extend-claim` hooks by default.
+
+For Codex CLI installation, build the marketplace wrapper:
+
+```
+npm run build:codex-marketplace
+codex plugin marketplace add ./dist/codex-marketplace
+```
+
+Release tags also publish `kanbots-skill-codex-plugin.zip`, `kanbots-skill-codex-marketplace.zip`, force-push the raw plugin layout to the `codex-plugin` branch, and force-push an installable marketplace layout to the `codex-marketplace` branch:
+
+```
+codex plugin marketplace add Adryeh/kanbots-skill@codex-marketplace
+```
 
 ## Install — portable SKILL.md (any other agent)
 

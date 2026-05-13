@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. Format: [Ke
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-13
+
+### Added
+
+- Codex plugin build output at `dist/codex-plugin/`, including `.codex-plugin/plugin.json`, skills, commands, agents, hooks, scripts, and default hook configuration.
+- Codex marketplace build output at `dist/codex-marketplace/`, ready for `codex plugin marketplace add`.
+- Release pipeline publishing for the Codex plugin zip, Codex marketplace zip, `codex-plugin` branch, and `codex-marketplace` branch.
+
+### Fixed
+
+- Release changelog extraction now handles bracketed Keep a Changelog headings literally.
+
 ## [0.1.1] - 2026-05-11
 
 ### Fixed

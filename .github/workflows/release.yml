@@ -44,18 +44,19 @@ jobs:
       - name: Restore inline variant alongside default
         run: mv SKILL.inline-core.md dist/skill/SKILL.inline-core.md
 
-      - name: Zip plugin output
+      - name: Zip Claude plugin output
         run: cd dist && zip -r ../kanbots-skill-plugin.zip plugin
+
+      - name: Zip Codex plugin output
+        run: cd dist && zip -r ../kanbots-skill-codex-plugin.zip codex-plugin
+
+      - name: Zip Codex marketplace output
+        run: cd dist && zip -r ../kanbots-skill-codex-marketplace.zip codex-marketplace
 
       - name: Extract changelog body
         id: changelog
         run: |
-          tag=${GITHUB_REF_NAME#v}
-          awk -v tag="[$tag]" '
-            $0 ~ "^## " tag { capture=1; next }
-            capture && /^## / { exit }
-            capture { print }
-          ' CHANGELOG.md > .release-body.md
+          node build/release-changelog.mjs "$GITHUB_REF_NAME" > .release-body.md
           echo "file=.release-body.md" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
@@ -64,6 +65,8 @@ jobs:
           body_path: ${{ steps.changelog.outputs.file }}
           files: |
             kanbots-skill-plugin.zip
+            kanbots-skill-codex-plugin.zip
+            kanbots-skill-codex-marketplace.zip
             dist/skill/SKILL.md
             dist/skill/SKILL.inline-core.md
 
@@ -82,6 +85,38 @@ jobs:
           git commit -q -m "release: ${GITHUB_REF_NAME}"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push -q --force origin claude-plugin
+
+      - name: Force-push dist/codex-plugin to codex-plugin branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tmp=$(mktemp -d)
+          cp -r dist/codex-plugin/. "$tmp/"
+          cd "$tmp"
+          git init -q
+          git checkout -q -b codex-plugin
+          git add .
+          git commit -q -m "release: ${GITHUB_REF_NAME}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -q --force origin codex-plugin
+
+      - name: Force-push dist/codex-marketplace to codex-marketplace branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tmp=$(mktemp -d)
+          cp -r dist/codex-marketplace/. "$tmp/"
+          cd "$tmp"
+          git init -q
+          git checkout -q -b codex-marketplace
+          git add .
+          git commit -q -m "release: ${GITHUB_REF_NAME}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -q --force origin codex-marketplace
 
       - name: Push portable v*-skill tag tree
         env:
