@@ -1,0 +1,17 @@
+{
+  "name": "kanbots-skill",
+  "owner": {
+    "name": "Adryeh"
+  },
+  "plugins": [
+    {
+      "name": "kanbots-skill",
+      "source": "./plugins/kanbots-skill",
+      "description": "Kanban-for-Agents skill — Claude Code plugin, Codex plugin, and portable SKILL.md.",
+      "version": "0.2.2",
+      "category": "Productivity",
+      "homepage": "https://docs.kanbots.ru/agents/setup",
+      "license": "MIT"
+    }
+  ]
+}
