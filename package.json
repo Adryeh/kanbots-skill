@@ -1,6 +1,6 @@
 {
   "name": "kanbots-skill",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Kanban-for-Agents skill — Claude Code plugin, Codex plugin, and portable SKILL.md.",
   "type": "module",
   "private": true,
@@ -9,8 +9,9 @@
   },
   "scripts": {
     "lint": "node build/shared.mjs --lint-only",
-    "build": "npm run build:plugin && npm run build:codex-plugin && npm run build:codex-marketplace && npm run build:portable",
+    "build": "npm run build:plugin && npm run build:claude-marketplace && npm run build:codex-plugin && npm run build:codex-marketplace && npm run build:portable",
     "build:plugin": "node build/plugin.mjs",
+    "build:claude-marketplace": "node build/claude-marketplace.mjs",
     "build:codex-plugin": "node build/codex-plugin.mjs",
     "build:codex-marketplace": "node build/codex-marketplace.mjs",
     "build:portable": "node build/portable.mjs",

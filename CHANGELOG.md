@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file. Format: [Ke
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-05-14
+
+### Added
+
+- Claude Code marketplace build output at `dist/claude-marketplace/`, with `.claude-plugin/marketplace.json` plus the plugin tree under `plugins/kanbots-skill/`. Installable via `claude plugin marketplace add ./dist/claude-marketplace`.
+- Release pipeline publishing for the Claude marketplace zip and a force-pushed `claude-marketplace` branch.
+
+### Fixed
+
+- README install command: `claude plugin add …@claude-plugin` does not exist. Replaced with the marketplace-add + plugin-install flow that Claude Code actually exposes.
+
 ## [0.2.1] - 2026-05-13
 
 ### Fixed

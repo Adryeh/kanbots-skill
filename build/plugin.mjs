@@ -59,42 +59,42 @@ async function emitTreeWithIncludes(srcDir, dstDir) {
   }
 }
 
-async function main() {
-  // 1) Lint first
+export async function buildClaudePlugin({ out = OUT } = {}) {
   const { errors } = await lintAll();
   if (errors.length) {
     for (const e of errors) console.error(`[plugin] ${e}`);
     process.exit(1);
   }
 
-  // 2) Clean
-  await rm(OUT, { recursive: true, force: true });
-  await mkdir(OUT, { recursive: true });
+  await rm(out, { recursive: true, force: true });
+  await mkdir(out, { recursive: true });
 
-  // 3) skill + references
-  const skillDst = join(OUT, 'skills/kanban-for-agents');
+  const skillDst = join(out, 'skills/kanban-for-agents');
   await emitMarkdownWithIncludes(join(SRC, 'skill.md'), join(skillDst, 'SKILL.md'));
   await emitTreeWithIncludes(join(SRC, 'references'), join(skillDst, 'references'));
 
-  // 4) commands + agents
-  await emitTreeWithIncludes(join(SRC, 'commands'), join(OUT, 'commands'));
-  await emitTreeWithIncludes(join(SRC, 'agents'), join(OUT, 'agents'));
+  await emitTreeWithIncludes(join(SRC, 'commands'), join(out, 'commands'));
+  await emitTreeWithIncludes(join(SRC, 'agents'), join(out, 'agents'));
 
-  // 5) hooks (verbatim copy — all 4)
-  await copyDir(join(SRC, 'hooks'), join(OUT, 'hooks'));
+  await copyDir(join(SRC, 'hooks'), join(out, 'hooks'));
 
-  // 6) manifest
   const manifest = await buildPluginManifest({ enabledHooks: ENABLED_HOOKS });
-  await mkdir(join(OUT, '.claude-plugin'), { recursive: true });
+  await mkdir(join(out, '.claude-plugin'), { recursive: true });
   await writeFile(
-    join(OUT, '.claude-plugin/plugin.json'),
+    join(out, '.claude-plugin/plugin.json'),
     JSON.stringify(manifest, null, 2) + '\n'
   );
 
-  console.log(`[plugin] emitted ${relative(REPO, OUT)}`);
+  console.log(`[plugin] emitted ${relative(REPO, out)}`);
 }
 
-main().catch((e) => {
-  console.error(e instanceof BuildError ? `[plugin] ${e.message}` : e);
-  process.exit(1);
-});
+async function main() {
+  await buildClaudePlugin();
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((e) => {
+    console.error(e instanceof BuildError ? `[plugin] ${e.message}` : e);
+    process.exit(1);
+  });
+}

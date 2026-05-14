@@ -59,6 +59,35 @@ describe('build pipeline against minimal src/', () => {
     }
   });
 
+  it('claude marketplace build emits an installable marketplace root', () => {
+    try {
+      execSync('node build/claude-marketplace.mjs', { stdio: 'pipe' });
+
+      expect(existsSync('dist/claude-marketplace/.claude-plugin/marketplace.json')).toBe(true);
+      expect(
+        existsSync('dist/claude-marketplace/plugins/kanbots-skill/.claude-plugin/plugin.json')
+      ).toBe(true);
+      expect(
+        existsSync('dist/claude-marketplace/plugins/kanbots-skill/skills/kanban-for-agents/SKILL.md')
+      ).toBe(true);
+
+      const marketplace = JSON.parse(
+        readFileSync('dist/claude-marketplace/.claude-plugin/marketplace.json', 'utf8')
+      );
+      expect(marketplace.name).toBe('kanbots-skill');
+      expect(marketplace.owner).toEqual({ name: 'Adryeh' });
+      expect(marketplace.plugins).toHaveLength(1);
+      expect(marketplace.plugins[0]).toMatchObject({
+        name: 'kanbots-skill',
+        source: './plugins/kanbots-skill',
+        category: 'Productivity',
+      });
+      expect(marketplace.plugins[0].version).toMatch(/^\d+\.\d+\.\d+/);
+    } finally {
+      rmSync('dist/claude-marketplace', { recursive: true, force: true });
+    }
+  });
+
   it('codex marketplace build emits an installable marketplace root', () => {
     try {
       execSync('node build/codex-marketplace.mjs', { stdio: 'pipe' });

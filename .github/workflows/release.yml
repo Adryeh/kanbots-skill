@@ -47,6 +47,9 @@ jobs:
       - name: Zip Claude plugin output
         run: cd dist && zip -r ../kanbots-skill-plugin.zip plugin
 
+      - name: Zip Claude marketplace output
+        run: cd dist && zip -r ../kanbots-skill-claude-marketplace.zip claude-marketplace
+
       - name: Zip Codex plugin output
         run: cd dist && zip -r ../kanbots-skill-codex-plugin.zip codex-plugin
 
@@ -65,6 +68,7 @@ jobs:
           body_path: ${{ steps.changelog.outputs.file }}
           files: |
             kanbots-skill-plugin.zip
+            kanbots-skill-claude-marketplace.zip
             kanbots-skill-codex-plugin.zip
             kanbots-skill-codex-marketplace.zip
             dist/skill/SKILL.md
@@ -85,6 +89,22 @@ jobs:
           git commit -q -m "release: ${GITHUB_REF_NAME}"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push -q --force origin claude-plugin
+
+      - name: Force-push dist/claude-marketplace to claude-marketplace branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tmp=$(mktemp -d)
+          cp -r dist/claude-marketplace/. "$tmp/"
+          cd "$tmp"
+          git init -q
+          git checkout -q -b claude-marketplace
+          git add .
+          git commit -q -m "release: ${GITHUB_REF_NAME}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -q --force origin claude-marketplace
 
       - name: Force-push dist/codex-plugin to codex-plugin branch
         env:

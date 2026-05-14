@@ -8,11 +8,24 @@ Kanban-for-Agents skill — ships as a **Claude Code plugin**, a **Codex plugin*
 
 ## Install — Claude Code plugin
 
+Claude Code installs plugins from a marketplace, so add the marketplace branch first, then install the plugin:
+
 ```
-claude plugin add github:Adryeh/kanbots-skill@claude-plugin
+claude plugin marketplace add Adryeh/kanbots-skill@claude-marketplace
+claude plugin install kanbots-skill@kanbots-skill
 ```
 
-The `claude-plugin` branch holds the built plugin layout. The plugin enables `enforce-agent-name` and `auto-extend-claim` hooks by default; opt-in hooks (`lint-mutation-args`, `stop-comment-progress`) ship as files.
+The `claude-marketplace` branch holds an installable marketplace tree (`.claude-plugin/marketplace.json` + `plugins/kanbots-skill/`). The standalone `claude-plugin` branch still holds just the plugin layout for tooling that wants the raw plugin directory.
+
+Build the marketplace tree locally:
+
+```
+npm run build:claude-marketplace
+claude plugin marketplace add ./dist/claude-marketplace
+claude plugin install kanbots-skill@kanbots-skill
+```
+
+The plugin enables `enforce-agent-name` and `auto-extend-claim` hooks by default; opt-in hooks (`lint-mutation-args`, `stop-comment-progress`) ship as files.
 
 ## Build — Codex plugin
 
