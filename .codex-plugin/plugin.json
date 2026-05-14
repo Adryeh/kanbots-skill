@@ -1,0 +1,42 @@
+{
+  "name": "kanbots-skill",
+  "version": "0.2.2",
+  "description": "Kanban-for-Agents skill — Claude Code plugin, Codex plugin, and portable SKILL.md.",
+  "author": {
+    "name": "Adryeh",
+    "url": "https://github.com/Adryeh"
+  },
+  "homepage": "https://docs.kanbots.ru/agents/setup",
+  "repository": "https://github.com/Adryeh/kanbots-skill",
+  "license": "MIT",
+  "keywords": [
+    "kanban",
+    "kanbots",
+    "mcp",
+    "agents",
+    "coordination",
+    "tasks"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks.json",
+  "interface": {
+    "displayName": "Kanbots",
+    "shortDescription": "Kanban workflows for coordinated coding agents",
+    "longDescription": "Use Kanbots to coordinate Codex agents on a shared kanban board with task claims, optimistic concurrency, progress reporting, and recovery guidance for common MCP errors.",
+    "developerName": "Adryeh",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://kanbots.ru",
+    "defaultPrompt": [
+      "Use Kanbots to pick up my next task",
+      "Split this work into Kanbots subtasks",
+      "Check my Kanbots board status"
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}
