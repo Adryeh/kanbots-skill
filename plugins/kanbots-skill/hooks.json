@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__kanban__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./hooks/enforce-agent-name.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ./hooks/auto-extend-claim.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "kanbots-skill",
+  "interface": {
+    "displayName": "Kanbots"
+  },
+  "plugins": [
+    {
+      "name": "kanbots-skill",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kanbots-skill"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
